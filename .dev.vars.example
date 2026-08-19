@@ -1,0 +1,41 @@
+# Copy this file to .dev.vars for local development. Never commit .dev.vars.
+# These generic values keep demo mode free of provider calls and charges.
+
+AUTH_MODE=dev
+FAX_PROVIDER=demo
+DEFAULT_PHONE_COUNTRY=US
+DEFAULT_FORWARD_EMAIL=fax@example.com
+PREFERRED_AREA_CODES=615,629
+DEFAULT_RENTAL_MONTHS=1
+RENTAL_MONTH_PRESETS=1,2,3
+MAX_RENTAL_MONTHS=12
+MAX_EMAIL_ATTACHMENT_BYTES=18000000
+
+# For deliberate local Sinch testing, replace and uncomment every value below.
+# AUTH_MODE=dev
+# FAX_PROVIDER=sinch
+# APP_BASE_URL=https://fax.example.com
+# WEBHOOK_BASE_URL=https://fax-events.example.com
+# WEBHOOK_USERNAME=replace-with-a-random-username
+# WEBHOOK_PASSWORD=replace-with-a-long-random-password
+# SINCH_PROJECT_ID=replace-with-project-id
+# SINCH_SERVICE_ID=replace-with-fax-service-id
+# SINCH_REGION=global
+# SINCH_KEY_ID=replace-with-key-id
+# SINCH_KEY_SECRET=replace-with-key-secret
+
+# SignalWire is the recommended production provider. Its API token and webhook
+# password belong only in .dev.vars or an ignored production secrets file.
+# AUTH_MODE=dev
+# FAX_PROVIDER=signalwire
+# APP_BASE_URL=https://fax.example.com
+# WEBHOOK_BASE_URL=https://fax-events.example.com
+# WEBHOOK_USERNAME=replace-with-a-random-username
+# WEBHOOK_PASSWORD=replace-with-a-long-random-password
+# SIGNALWIRE_PROJECT_ID=replace-with-project-id
+# SIGNALWIRE_API_TOKEN=replace-with-api-token
+# SIGNALWIRE_SPACE_URL=your-space.signalwire.com
+# SIGNALWIRE_LOCAL_NUMBER_MONTHLY_PRICE=0.50
+# SIGNALWIRE_ACCOUNT_MODE=trial
+# SIGNALWIRE_MINIMUM_NUMBER_HOLD_DAYS=30
+# EMAIL_FROM_ADDRESS=fax@yourdomain.com

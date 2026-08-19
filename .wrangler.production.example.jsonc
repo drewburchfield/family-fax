@@ -1,0 +1,58 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  "name": "family-fax",
+  "main": "./src/worker/index.ts",
+  "compatibility_date": "2026-08-16",
+  "compatibility_flags": ["nodejs_compat"],
+  "upload_source_maps": true,
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1
+  },
+  "version_metadata": {
+    "binding": "CF_VERSION_METADATA"
+  },
+  "assets": {
+    "directory": "./dist/client",
+    "not_found_handling": "single-page-application",
+    "run_worker_first": ["/api/*", "/webhooks/*", "/provider-content/*"]
+  },
+  "routes": [
+    { "pattern": "fax.example.com", "custom_domain": true },
+    { "pattern": "fax-events.example.com/webhooks/*", "zone_name": "example.com" },
+    { "pattern": "fax-events.example.com/provider-content/*", "zone_name": "example.com" }
+  ],
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "family-fax",
+      "database_id": "00000000-0000-0000-0000-000000000000"
+    }
+  ],
+  "r2_buckets": [
+    {
+      "binding": "DOCUMENTS",
+      "bucket_name": "family-fax-documents"
+    }
+  ],
+  "send_email": [
+    {
+      "name": "EMAIL"
+    }
+  ],
+  "workflows": [
+    {
+      "name": "family-fax-outbound",
+      "binding": "OUTBOUND_FAX_WORKFLOW",
+      "class_name": "OutboundFaxWorkflow"
+    },
+    {
+      "name": "family-fax-number-lifecycle",
+      "binding": "NUMBER_LIFECYCLE_WORKFLOW",
+      "class_name": "NumberLifecycleWorkflow"
+    }
+  ],
+  "triggers": {
+    "crons": ["0 * * * *"]
+  }
+}

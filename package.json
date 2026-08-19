@@ -1,0 +1,67 @@
+{
+  "name": "family-fax",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "A self-hosted fax utility for occasional household use.",
+  "license": "MIT",
+  "homepage": "https://github.com/drewburchfield/family-fax#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/drewburchfield/family-fax.git"
+  },
+  "bugs": {
+    "url": "https://github.com/drewburchfield/family-fax/issues"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "deploy": "npm run build && node scripts/cloudflare-production.mjs deploy",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.worker.json --noEmit",
+    "lint": "oxlint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "demo:seed": "tsx scripts/seed-demo.ts",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "db:migrate:remote": "node scripts/cloudflare-production.mjs migrate",
+    "cf-typegen": "wrangler types",
+    "verify:production-template": "wrangler deploy --dry-run --config .wrangler.production.example.jsonc --outdir .wrangler/public-release-dry-run",
+    "verify": "npm run lint && npm run typecheck && npm test && npm run build && npm run verify:production-template"
+  },
+  "dependencies": {
+    "hono": "4.13.2",
+    "jose": "6.2.9",
+    "libphonenumber-js": "1.13.11",
+    "pdf-lib": "1.17.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-router-dom": "7.18.2",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "1.52.1",
+    "@cloudflare/workers-types": "5.20260816.1",
+    "@playwright/test": "1.62.1",
+    "@testing-library/jest-dom": "7.0.1",
+    "@testing-library/react": "16.3.2",
+    "@testing-library/user-event": "14.6.4",
+    "@types/node": "22.20.1",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
+    "@vitejs/plugin-react": "6.0.5",
+    "@vitest/coverage-v8": "4.1.10",
+    "jsdom": "30.0.1",
+    "oxlint": "1.78.0",
+    "tsx": "4.23.12",
+    "typescript": "6.0.3",
+    "vite": "8.2.1",
+    "vitest": "4.1.10",
+    "wrangler": "4.123.0"
+  }
+}
