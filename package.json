@@ -35,8 +35,8 @@
     "verify": "npm run lint && npm run typecheck && npm test && npm run build && npm run verify:production-template"
   },
   "dependencies": {
-    "hono": "4.13.2",
-    "jose": "6.2.9",
+    "hono": "4.13.3",
+    "jose": "6.2.10",
     "libphonenumber-js": "1.13.11",
     "pdf-lib": "1.17.1",
     "react": "19.2.8",
