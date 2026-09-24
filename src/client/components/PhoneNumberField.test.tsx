@@ -14,7 +14,7 @@ describe("PhoneNumberField", () => {
     const onValueChange = vi.fn();
     render(<PhoneNumberHarness onValueChange={onValueChange} />);
 
-    expect((screen.getByLabelText("Country") as unknown as HTMLSelectElement).value).toBe("US");
+    expect(screen.getByLabelText("Country")).toHaveValue("US");
     expect(screen.getByText("+1")).toBeTruthy();
 
     await user.type(screen.getByLabelText("Fax number"), "6155550123");
@@ -28,7 +28,7 @@ describe("PhoneNumberField", () => {
 
     await user.selectOptions(screen.getByLabelText("Country"), "GB");
 
-    expect((screen.getByLabelText("Country") as unknown as HTMLSelectElement).value).toBe("GB");
+    expect(screen.getByLabelText("Country")).toHaveValue("GB");
     expect(screen.getByText("+44")).toBeTruthy();
   });
 

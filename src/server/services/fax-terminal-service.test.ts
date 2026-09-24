@@ -103,14 +103,14 @@ async function createRealFixture() {
     defaultDestinationEmail: "family@example.com",
     clock,
   });
-  const numbers = { releaseNumber: vi.fn() };
+  const numbers = { releaseNumber: vi.fn<NumberService["releaseNumber"]>() };
   return {
     repository,
     send,
     service: new FaxTerminalService({
       repository,
       notifications,
-      numbers: numbers as unknown as NumberService,
+      numbers,
     }),
   };
 }
@@ -120,14 +120,22 @@ async function createFixture(faxJob: FaxJob, temporaryNumber: TemporaryNumber) {
   await repository.createFaxJob(faxJob);
   await repository.createTemporaryNumber(temporaryNumber);
   const notifications = {
-    deliver: vi.fn().mockResolvedValue({
+    deliver: vi.fn<NotificationService["deliver"]>().mockResolvedValue({
       faxJobId: faxJob.id,
       kind: "outbound_delivered",
       state: "delivered",
+      destinationEmail: "family@example.com",
+      attempt: 1,
+      messageId: "message-1",
+      attached: true,
+      lastError: null,
+      createdAt: faxJob.createdAt,
+      updatedAt: faxJob.updatedAt,
+      deliveredAt: faxJob.completedAt,
     }),
   };
   const numbers = {
-    releaseNumber: vi.fn().mockImplementation(async () => {
+    releaseNumber: vi.fn<NumberService["releaseNumber"]>().mockImplementation(async () => {
       await repository.updateTemporaryNumber(temporaryNumber.id, { state: "released" });
       return { ...temporaryNumber, state: "released" as const };
     }),
@@ -138,8 +146,8 @@ async function createFixture(faxJob: FaxJob, temporaryNumber: TemporaryNumber) {
     numbers,
     service: new FaxTerminalService({
       repository,
-      notifications: notifications as unknown as NotificationService,
-      numbers: numbers as unknown as NumberService,
+      notifications,
+      numbers,
     }),
   };
 }

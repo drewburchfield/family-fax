@@ -17,5 +17,5 @@
     "jsx": "react-jsx",
     "types": ["vite/client", "vitest/globals", "node"]
   },
-  "include": ["src/client", "src/shared", "src/domain", "src/**/*.test.ts", "src/**/*.test.tsx", "vite.config.ts", "vitest.config.ts", "playwright.config.ts"]
+  "include": ["src/client", "src/shared", "src/domain", "src/**/*.test.ts", "src/**/*.test.tsx", "src/test/setup.ts", "vite.config.ts", "vitest.config.ts", "playwright.config.ts"]
 }

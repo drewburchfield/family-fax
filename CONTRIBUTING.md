@@ -20,6 +20,9 @@ npx playwright install chromium
 npm run test:e2e
 ```
 
+Lint includes a [selected anti-slop ruleset](docs/anti-slop.md). That policy
+documents enabled and deferred rules, vendored source provenance, and updates.
+
 ## Expectations
 
 - Add tests at stable seams such as domain transitions, provider contracts, services, HTTP behavior, and user journeys.

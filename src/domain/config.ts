@@ -114,7 +114,7 @@ function parsePositiveInteger(value: string, name: string, issues: string[]): nu
   return parsed;
 }
 
-export function parseRuntimeConfig(input: Record<string, string | undefined>): RuntimeConfig {
+export function parseRuntimeConfig(input: unknown): RuntimeConfig {
   const parsed = rawConfigSchema.safeParse(input);
   if (!parsed.success) {
     throw new ConfigError(parsed.error.issues.map((issue) => `${issue.path.join(".")}: ${issue.message}`));

@@ -40,7 +40,7 @@ describe("scheduled safety sweep", () => {
       throw new Error("provider event audit unavailable");
     });
     const terminal = {
-      complete: vi.fn().mockResolvedValue({ notification: { state: "delivered" }, numberState: null }),
+      complete: vi.fn<FaxTerminalService["complete"]>().mockResolvedValue({ notification: null, numberState: null }),
     };
 
     const result = await runSafetySweep({
@@ -49,7 +49,7 @@ describe("scheduled safety sweep", () => {
       fax,
       audit,
       clock,
-      terminal: terminal as unknown as FaxTerminalService,
+      terminal,
     });
 
     expect(result.reconcileFailed).toBe(1);

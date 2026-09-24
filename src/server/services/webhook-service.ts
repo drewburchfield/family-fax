@@ -22,7 +22,7 @@ export class WebhookService {
       fax: FaxService;
       provider: FaxProvider;
       notifications: NotificationService;
-      terminal: FaxTerminalService;
+      terminal: Pick<FaxTerminalService, "complete">;
       clock: Clock;
       idGenerator?: () => string;
     },
