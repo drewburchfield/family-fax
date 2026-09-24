@@ -1,23 +1,18 @@
 import { describe, expect, it, vi } from "vitest";
 
 import { CloudflareFaxEmailNotifier } from "../server/notifications/fax-email";
-import type {
-  FaxEmailNotification,
-  FaxEmailNotifier,
-} from "../server/notifications/fax-email";
+import type { FaxEmailNotification } from "../server/notifications/fax-email";
 import type { WorkerEnv } from "./env";
 import { createServiceContainer } from "./services";
 
 describe("createServiceContainer", () => {
   it("wires SignalWire fax confirmations into the notification service", () => {
-    const email = { send: vi.fn() };
+    const email = emailBinding();
 
     const services = createServiceContainer(signalWireEnv(email));
-    const notificationDependencies = services.notifications as unknown as {
-      dependencies: { notifier: FaxEmailNotifier | null };
-    };
+    const notifier = services.notifications["dependencies"].notifier;
 
-    expect(notificationDependencies.dependencies.notifier).toBeInstanceOf(
+    expect(notifier).toBeInstanceOf(
       CloudflareFaxEmailNotifier,
     );
   });
@@ -27,16 +22,15 @@ describe("createServiceContainer", () => {
   });
 
   it("applies the configured email attachment limit", async () => {
-    const email = { send: vi.fn().mockResolvedValue({ messageId: "message-1" }) };
+    const email = emailBinding();
     const services = createServiceContainer({
       ...signalWireEnv(email),
       MAX_EMAIL_ATTACHMENT_BYTES: "1234",
     });
-    const notificationDependencies = services.notifications as unknown as {
-      dependencies: { notifier: FaxEmailNotifier };
-    };
+    const notifier = services.notifications["dependencies"].notifier;
+    if (!notifier) throw new Error("Expected a configured email notifier");
 
-    await notificationDependencies.dependencies.notifier.send(notification({
+    await notifier.send(notification({
       bytes: new ArrayBuffer(1235),
     }));
 
@@ -44,13 +38,20 @@ describe("createServiceContainer", () => {
   });
 });
 
-function signalWireEnv(email?: { send: ReturnType<typeof vi.fn> }): WorkerEnv {
+function emailBinding() {
+  return {
+    send: vi.fn<(message: EmailMessage | EmailMessageBuilder) => Promise<EmailSendResult>>()
+      .mockResolvedValue({ messageId: "message-1" }),
+  } satisfies SendEmail;
+}
+
+function signalWireEnv(email?: SendEmail): WorkerEnv {
   return {
     DB: {} as D1Database,
     DOCUMENTS: {} as R2Bucket,
     OUTBOUND_FAX_WORKFLOW: {} as Workflow,
     NUMBER_LIFECYCLE_WORKFLOW: {} as Workflow,
-    ...(email ? { EMAIL: email as unknown as SendEmail } : {}),
+    ...(email ? { EMAIL: email } : {}),
     APP_NAME: "Family Fax",
     APP_VERSION: "0.1.0",
     AUTH_MODE: "dev",

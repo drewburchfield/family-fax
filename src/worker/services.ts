@@ -17,7 +17,7 @@ import { R2DocumentStore } from "../server/storage/document-store";
 import type { WorkerEnv } from "./env";
 
 export function createServiceContainer(env: WorkerEnv) {
-  const config = parseRuntimeConfig(env as unknown as Record<string, string | undefined>);
+  const config = parseRuntimeConfig(env);
   const repository = new D1Repository(env.DB);
   const documents = new R2DocumentStore(env.DOCUMENTS);
   const provider = createFaxProvider(config);

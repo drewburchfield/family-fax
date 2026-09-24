@@ -10,20 +10,33 @@ import {
 describe("D1 row mapping", () => {
   it("uses a NULL-safe filter for unrecoverable ambiguous submissions", async () => {
     let preparedSql = "";
-    const database = {
-      prepare(sql: string) {
-        preparedSql = sql;
+    const unexpectedCall = () => { throw new Error("Unexpected D1 operation in SQL filter test"); };
+    const statement: D1PreparedStatement = {
+      bind() { return statement; },
+      async all() {
         return {
-          bind() {
-            return {
-              async all() {
-                return { results: [] };
-              },
-            };
+          results: [],
+          success: true,
+          meta: {
+            changed_db: false, changes: 0, duration: 0, last_row_id: 0,
+            rows_read: 0, rows_written: 0, size_after: 0,
           },
         };
       },
-    } as unknown as D1Database;
+      first: unexpectedCall,
+      run: unexpectedCall,
+      raw: unexpectedCall,
+    };
+    const database: D1Database = {
+      prepare(sql: string) {
+        preparedSql = sql;
+        return statement;
+      },
+      batch: unexpectedCall,
+      exec: unexpectedCall,
+      withSession: unexpectedCall,
+      dump: unexpectedCall,
+    };
 
     await new D1Repository(database).listStuckFaxJobs("2026-08-16T12:01:00.000Z");
 

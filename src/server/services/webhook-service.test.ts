@@ -150,7 +150,7 @@ async function createFixture(
     defaultDestinationEmail: "fax@example.com",
     clock,
   });
-  const terminal = { complete: vi.fn().mockResolvedValue({ notification: null, numberState: null }) };
+  const terminal = { complete: vi.fn<FaxTerminalService["complete"]>().mockResolvedValue({ notification: null, numberState: null }) };
   const service = new WebhookService({
     repository,
     documents,
@@ -158,7 +158,7 @@ async function createFixture(
     fax,
     provider,
     notifications,
-    terminal: terminal as unknown as FaxTerminalService,
+    terminal,
     clock,
   });
   await repository.createFaxJob(receiveJob());

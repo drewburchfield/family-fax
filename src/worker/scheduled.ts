@@ -15,7 +15,7 @@ export async function runSafetySweep(dependencies: {
   fax: FaxService;
   audit: AuditService;
   clock: Clock;
-  terminal?: FaxTerminalService;
+  terminal?: Pick<FaxTerminalService, "complete">;
   notifications?: NotificationService;
 }): Promise<{
   inspected: number;

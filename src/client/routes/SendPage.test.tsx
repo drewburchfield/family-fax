@@ -43,7 +43,7 @@ describe("household line send flow", () => {
     await screen.findByRole("button", { name: "Send fax" });
 
     expect((screen.getByLabelText("Fax number") as HTMLInputElement).disabled).toBe(true);
-    expect((screen.getByLabelText("Country") as unknown as HTMLSelectElement).disabled).toBe(true);
+    expect(screen.getByLabelText("Country")).toBeDisabled();
     expect((screen.getByLabelText("Recipient") as HTMLInputElement).disabled).toBe(true);
     expect((screen.getByLabelText("Add PDF or photos") as HTMLInputElement).disabled).toBe(true);
     expect((screen.getByRole("button", { name: "Remove records.pdf" }) as HTMLButtonElement).disabled).toBe(true);

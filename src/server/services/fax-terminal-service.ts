@@ -17,8 +17,8 @@ export class FaxTerminalService {
   constructor(
     private readonly dependencies: {
       repository: Repository;
-      notifications: NotificationService;
-      numbers: NumberService;
+      notifications: Pick<NotificationService, "deliver">;
+      numbers: Pick<NumberService, "releaseNumber">;
     },
   ) {}
 

@@ -21,6 +21,13 @@ const demoEnv = {
 };
 
 describe("parseRuntimeConfig", () => {
+  it("validates Worker bindings at the schema boundary without exposing them in config", () => {
+    const config = parseRuntimeConfig({ ...demoEnv, DB: {}, DOCUMENTS: {} });
+    expect(config).toEqual(parseRuntimeConfig(demoEnv));
+    expect(() => parseRuntimeConfig({ ...demoEnv, MAX_UPLOAD_BYTES: {} })).toThrow(ConfigError);
+    expect(() => parseRuntimeConfig(null)).toThrow(ConfigError);
+  });
+
   it("normalizes a generic demo configuration", () => {
     const config = parseRuntimeConfig(demoEnv);
 
